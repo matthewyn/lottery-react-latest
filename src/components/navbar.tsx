@@ -15,8 +15,8 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="px-8 mb-12 md:mb-20">
-      <div className="max-w-7xl mx-auto py-4 flex flex-col md:flex-row gap-4 md:items-center justify-between">
+    <nav className="px-8 border-b border-gray-700">
+      <div className="max-w-7xl mx-auto pt-3 pb-6 md:pb-3 flex flex-col md:flex-row gap-4 md:items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="md:hidden">
             <button onClick={() => setState(!state)}>
@@ -35,7 +35,6 @@ export default function Navbar() {
             <div className="sm:hidden">
               <Logo />
             </div>
-            <Separator className="sm:hidden" />
             {menus.map((item, idx) => (
               <li key={idx}>
                 <Link to={item.path}>{item.title}</Link>

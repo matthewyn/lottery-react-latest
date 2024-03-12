@@ -3,6 +3,7 @@ import CustomProgress from "@/components/custom-progress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DateContextType, useDate } from "@/contexts/date-context";
 import lottery from "@/lottery";
 import web3 from "@/web3";
 import { Loader2 } from "lucide-react";
@@ -17,6 +18,11 @@ export default function Home() {
   const [amount, setAmount] = useState("");
   const [isLoading, setIsLoading] = useState<HomeLoading>({ pickWinner: false, enter: false });
   const [isManager, setIsManager] = useState(false);
+  const [isIn, setIsIn] = useState(false);
+  const { timeRemaining, setTimeRemaining } = useDate() as DateContextType;
+  const days = Math.floor(timeRemaining / 86400);
+  const hours = Math.floor((timeRemaining % 86400) / 3600);
+  const minutes = Math.floor((timeRemaining % 3600) / 60);
   const address = lottery.options.address as string;
   const numPlayers = players.length;
 
@@ -27,6 +33,7 @@ export default function Home() {
         const players = (await lottery.methods.getPlayers().call()) as string[];
         const manager = (await lottery.methods.manager().call()) as string;
         const accounts = await web3.eth.getAccounts();
+        setIsIn(players.includes(accounts[0]));
         setIsManager(accounts[0] === manager);
         setBalance(web3.utils.fromWei(balance, "ether"));
         setPlayers(players);
@@ -34,6 +41,17 @@ export default function Home() {
       fetchData();
     },
     [address]
+  );
+
+  useEffect(
+    function () {
+      const tick = setInterval(() => {
+        setTimeRemaining((time) => time - 1);
+      }, 1000);
+
+      return () => clearInterval(tick);
+    },
+    [setTimeRemaining]
   );
 
   const handleEnter = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -110,7 +128,7 @@ export default function Home() {
     content = (
       <div className="flex flex-col xs:items-center items-start gap-3">
         <span>Learn more about Us!</span>
-        <Button variant="secondary" className="rounded-full" size="lg">
+        <Button variant="outline" className="rounded-full" size="lg">
           View docs
         </Button>
       </div>
@@ -118,51 +136,77 @@ export default function Home() {
   }
 
   return (
-    <section className="px-8 ">
-      <div className="max-w-xl lg:max-w-6xl mx-auto flex flex-col gap-20 lg:gap-12">
-        <div className="grid lg:grid-cols-2">
-          <div className="flex flex-col gap-4">
-            <h1 className="font-bold text-3xl">
-              Win Big, Securely: Join the Future of Lotteries with <span className="text-emerald-300">CryptoRaffle!</span>
-            </h1>
-            <p className="max-w-lg mb-8">
-              CryptoRaffle is your gateway to an innovative world of digital raffles, powered by the revolutionary technology of blockchain and cryptocurrency. Say goodbye to traditional ticketing systems and embrace the future of
-              entertainment with us.
-            </p>
-            <div className="grid xs:grid-cols-[auto_1fr] items-center gap-4">
-              <span className="font-bold uppercase">Ether in pools:</span>
-              <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
-                <CustomProgress value={Number(balance)} total={1000} />
-                <span>{balance} ether</span>
+    <>
+      {isIn ? <aside className="border-b pt-2 pb-3 font-semibold border-gray-700 px-8 text-center text-sm">Congratulations! 🎉 You're now in the running for our Crypto Raffle.</aside> : null}
+      <main className="flex mt-12 md:mt-20 flex-col gap-12 md:gap-20">
+        <section className="px-8">
+          <div className="max-w-xl lg:max-w-6xl mx-auto flex flex-col gap-16 lg:gap-12">
+            <div className="grid lg:grid-cols-2">
+              <div className="flex flex-col gap-4">
+                <h1 className="font-bold text-3xl">
+                  Win Big, Securely: Join the Future of Lotteries with <span className="text-emerald-300">CryptoRaffle!</span>
+                </h1>
+                <p className="max-w-lg mb-8">
+                  CryptoRaffle is your gateway to an innovative world of digital raffles, powered by the revolutionary technology of blockchain and cryptocurrency. Say goodbye to traditional ticketing systems and embrace the future of
+                  entertainment with us.
+                </p>
+                <div className="grid xs:grid-cols-[auto_1fr] items-center gap-4">
+                  <span className="font-bold uppercase">Ether in pools:</span>
+                  <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
+                    <CustomProgress value={Number(balance)} total={1000} />
+                    <span>{balance} ether</span>
+                  </div>
+                </div>
+                <div className="grid xs:grid-cols-[auto_1fr] items-center gap-4">
+                  <span className="font-bold uppercase">Total players:</span>
+                  <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
+                    <CustomProgress value={numPlayers} total={1000} />
+                    <span>{numPlayers} players</span>
+                  </div>
+                </div>
+              </div>
+              <div className="hidden lg:block">
+                <img src="/cube.png" alt="Cube technology" />
               </div>
             </div>
-            <div className="grid xs:grid-cols-[auto_1fr] items-center gap-4">
-              <span className="font-bold uppercase">Total players:</span>
-              <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
-                <CustomProgress value={numPlayers} total={1000} />
-                <span>{numPlayers} players</span>
-              </div>
+            <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-20">
+              {!isIn ? (
+                <div className="flex flex-col xs:items-center gap-3">
+                  <span>Join the Crypto Raffle Now!</span>
+                  <CustomDialog handler={handleEnter} formId="enter-form" buttonLabel="Enter me" title="Secure Your Chance: Enter the Raffle Queue Now!" isLoading={isLoading}>
+                    <div className="grid sm:grid-cols-4 items-center gap-4">
+                      <Label htmlFor="amount" className="sm:text-right">
+                        Amount
+                      </Label>
+                      <Input id="amount" placeholder=".01" className="col-span-3" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                    </div>
+                  </CustomDialog>
+                </div>
+              ) : (
+                <div className="flex flex-col xs:items-center items-start gap-3">
+                  <span>What's next?</span>
+                  <Button variant="secondary" className="rounded-full" size="lg">
+                    See other events
+                  </Button>
+                </div>
+              )}
+              {content}
             </div>
           </div>
-          <div className="hidden lg:block">
-            <img src="/cube.png" alt="Cube technology" />
+        </section>
+        <section className="px-8">
+          <div className="max-w-6xl mx-auto flex flex-col gap-8">
+            <h2 className="font-bold text-2xl text-center">Time left to join</h2>
+            <div className="flex justify-center text-2xl gap-2 font-bold items-center">
+              <span className="bg-white flex text-slate-950 w-14 h-14 items-center justify-center rounded-sm">{days}</span>
+              <span>:</span>
+              <span className="bg-white flex text-slate-950 w-14 h-14 items-center justify-center rounded-sm">{hours}</span>
+              <span>:</span>
+              <span className="bg-white flex text-slate-950 w-14 h-14 items-center justify-center rounded-sm">{minutes}</span>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-20">
-          <div className="flex flex-col xs:items-center gap-3">
-            <span>Join the Crypto Raffle Now!</span>
-            <CustomDialog handler={handleEnter} formId="enter-form" buttonLabel="Enter me" title="Secure Your Chance: Enter the Raffle Queue Now!" isLoading={isLoading}>
-              <div className="grid sm:grid-cols-4 items-center gap-4">
-                <Label htmlFor="amount" className="sm:text-right">
-                  Amount
-                </Label>
-                <Input id="amount" placeholder=".01" className="col-span-3" value={amount} onChange={(e) => setAmount(e.target.value)} />
-              </div>
-            </CustomDialog>
-          </div>
-          {content}
-        </div>
-      </div>
-    </section>
+        </section>
+      </main>
+    </>
   );
 }
