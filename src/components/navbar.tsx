@@ -3,7 +3,6 @@ import Logo from "./logo";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
 
 export default function Navbar() {
   const [state, setState] = useState(false);
