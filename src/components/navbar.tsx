@@ -15,7 +15,7 @@ export default function Navbar() {
 
   return (
     <nav className="px-8 border-b border-gray-700">
-      <div className="max-w-7xl mx-auto pt-3 pb-6 md:pb-3 flex flex-col md:flex-row gap-4 md:items-center justify-between">
+      <div className="max-w-7xl mx-auto py-3 md:pb-3 flex flex-col md:flex-row gap-4 md:items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="md:hidden">
             <button onClick={() => setState(!state)}>
@@ -29,7 +29,7 @@ export default function Navbar() {
             Join the network
           </Button>
         </div>
-        <div className={`md:block ${state ? "block" : "hidden"}`}>
+        <div className={`md:block mb-3 md:mb-0 ${state ? "block" : "hidden"}`}>
           <ul className="flex flex-col md:flex-row gap-4">
             <div className="sm:hidden">
               <Logo />
