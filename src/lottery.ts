@@ -1,15 +1,13 @@
 import web3 from "./web3";
+import LotteryFactory from "../ethereum/build/LotteryFactory.json";
+import Lottery from "../ethereum/build/Lottery.json";
 
-const address = "0x6f61cE9D2C9119F0A405C70A9237F8d5b3b4636A";
+const address = "0x5c76B14EF50A17FbB6BD99C5493C65c55eb4ba46";
 
-const abi = [
-  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
-  { inputs: [], name: "enter", outputs: [], stateMutability: "payable", type: "function" },
-  { inputs: [], name: "getPlayers", outputs: [{ internalType: "address[]", name: "", type: "address[]" }], stateMutability: "view", type: "function" },
-  { inputs: [], name: "manager", outputs: [{ internalType: "address", name: "", type: "address" }], stateMutability: "view", type: "function" },
-  { inputs: [], name: "pickWinner", outputs: [], stateMutability: "nonpayable", type: "function" },
-  { inputs: [{ internalType: "uint256", name: "", type: "uint256" }], name: "players", outputs: [{ internalType: "address", name: "", type: "address" }], stateMutability: "view", type: "function" },
-];
+const lotteryFactory = new web3.eth.Contract(LotteryFactory.abi, address);
 
-const lottery = new web3.eth.Contract(abi, address);
-export default lottery;
+async function lottery(address: string) {
+  return await new web3.eth.Contract(Lottery.abi, address);
+}
+
+export { lotteryFactory, lottery };

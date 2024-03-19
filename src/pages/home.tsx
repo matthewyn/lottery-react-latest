@@ -1,147 +1,130 @@
-import CustomDialog from "@/components/custom-dialog";
 import CustomProgress from "@/components/custom-progress";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { DateContextType, useDate } from "@/contexts/date-context";
-import lottery from "@/lottery";
-import web3 from "@/web3";
-import { Loader2 } from "lucide-react";
+import { lotteryFactory } from "@/lottery";
 import { HiCubeTransparent } from "react-icons/hi2";
 import { HiMiniGlobeAsiaAustralia } from "react-icons/hi2";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi2";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 export type HomeLoading = { pickWinner: boolean; enter: boolean };
 
 export default function Home() {
-  const [balance, setBalance] = useState("");
-  const [players, setPlayers] = useState<string[]>([]);
-  const [amount, setAmount] = useState("");
-  const [isLoading, setIsLoading] = useState<HomeLoading>({ pickWinner: false, enter: false });
-  const [isManager, setIsManager] = useState(false);
-  const [isIn, setIsIn] = useState(false);
-  const { timeRemaining, setTimeRemaining } = useDate() as DateContextType;
-  const days = Math.floor(timeRemaining / 86400);
-  const hours = Math.floor((timeRemaining % 86400) / 3600);
-  const minutes = Math.floor((timeRemaining % 3600) / 60);
-  const address = lottery.options.address as string;
-  const numPlayers = players.length;
+  const [deployedLottery, setDeployedLottery] = useState<string[]>([]);
+  // const [players, setPlayers] = useState<string[]>([]);
+  // const [amount, setAmount] = useState("");
+  // const [isLoading, setIsLoading] = useState<HomeLoading>({ pickWinner: false, enter: false });
+  // const [isManager, setIsManager] = useState(false);
+  // const [isIn, setIsIn] = useState(false);
+  // const { timeRemaining, setTimeRemaining } = useDate() as DateContextType;
+  // const days = Math.floor(timeRemaining / 86400);
+  // const hours = Math.floor((timeRemaining % 86400) / 3600);
+  // const minutes = Math.floor((timeRemaining % 3600) / 60);
+  // const address = lottery.options.address as string;
+  // const numPlayers = players.length;
 
-  useEffect(
-    function () {
-      async function fetchData() {
-        const balance = await web3.eth.getBalance(address);
-        const players = (await lottery.methods.getPlayers().call()) as string[];
-        const manager = (await lottery.methods.manager().call()) as string;
-        const accounts = await web3.eth.getAccounts();
-        setIsIn(players.includes(accounts[0]));
-        setIsManager(accounts[0] === manager);
-        setBalance(web3.utils.fromWei(balance, "ether"));
-        setPlayers(players);
-      }
-      fetchData();
-    },
-    [address]
-  );
-
-  useEffect(
-    function () {
-      const tick = setInterval(() => {
-        setTimeRemaining((time) => time - 1);
-      }, 1000);
-
-      return () => clearInterval(tick);
-    },
-    [setTimeRemaining]
-  );
-
-  const handleEnter = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!amount) return toast.error("Amount is required");
-    try {
-      setIsLoading((loading) => {
-        const newLoading = Object.assign({}, loading);
-        newLoading.enter = true;
-        return newLoading;
-      });
-      const accounts = await web3.eth.getAccounts();
-      await lottery.methods.enter().send({ from: accounts[0], value: web3.utils.toWei(amount, "ether") });
-      toast.success("You get into the queue!");
-      setAmount("");
-      setTimeout(function () {
-        window.location.reload();
-      }, 1000);
-    } catch (err) {
-      if (err instanceof Error) {
-        toast.error(err.message.split(": ")[2]);
-      } else {
-        toast.error("Something bad happen");
-      }
-    } finally {
-      setIsLoading((loading) => {
-        const newLoading = Object.assign({}, loading);
-        newLoading.enter = false;
-        return newLoading;
-      });
+  useEffect(function () {
+    async function fetchData() {
+      const deployedLottery = (await lotteryFactory.methods.getDeployedLottery().call()) as string[];
+      setDeployedLottery(deployedLottery);
     }
-  };
+    fetchData();
+  }, []);
 
-  const handlePickWinner = async () => {
-    try {
-      setIsLoading((loading) => {
-        const newLoading = Object.assign({}, loading);
-        newLoading.pickWinner = true;
-        return newLoading;
-      });
-      const accounts = await web3.eth.getAccounts();
-      await lottery.methods.pickWinner().send({ from: accounts[0] });
-      toast.success("Winner has been selected");
-      setTimeout(function () {
-        window.location.reload();
-      }, 1000);
-    } catch (err) {
-      if (err instanceof Error) {
-        toast.error(err.message.split(": ")[2]);
-      } else {
-        toast.error("Something bad happen");
-      }
-    } finally {
-      setIsLoading((loading) => {
-        const newLoading = Object.assign({}, loading);
-        newLoading.pickWinner = false;
-        return newLoading;
-      });
-    }
-  };
+  // useEffect(
+  //   function () {
+  //     const tick = setInterval(() => {
+  //       setTimeRemaining((time) => time - 1);
+  //     }, 1000);
 
-  let content;
-  if (isManager) {
-    content = (
-      <div className="flex flex-col xs:items-center items-start gap-3">
-        <span>Pick a winner!</span>
-        <Button onClick={handlePickWinner} variant="outline" className="rounded-full" size="lg" disabled={players.length === 0}>
-          {isLoading.pickWinner ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Pick now
-        </Button>
-      </div>
-    );
-  } else {
-    content = (
-      <div className="flex flex-col xs:items-center items-start gap-3">
-        <span>Learn more about Us!</span>
-        <Button variant="outline" className="rounded-full" size="lg">
-          View docs
-        </Button>
-      </div>
-    );
-  }
+  //     return () => clearInterval(tick);
+  //   },
+  //   [setTimeRemaining]
+  // );
+
+  // const handleEnter = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (!amount) return toast.error("Amount is required");
+  //   try {
+  //     setIsLoading((loading) => {
+  //       const newLoading = Object.assign({}, loading);
+  //       newLoading.enter = true;
+  //       return newLoading;
+  //     });
+  //     const accounts = await web3.eth.getAccounts();
+  //     await lottery.methods.enter().send({ from: accounts[0], value: web3.utils.toWei(amount, "ether") });
+  //     toast.success("You get into the queue");
+  //     setAmount("");
+  //     setTimeout(function () {
+  //       window.location.reload();
+  //     }, 1000);
+  //   } catch (err) {
+  //     if (err instanceof Error) {
+  //       toast.error(err.message.split(": ")[2]);
+  //     } else {
+  //       toast.error("Something bad happen");
+  //     }
+  //   } finally {
+  //     setIsLoading((loading) => {
+  //       const newLoading = Object.assign({}, loading);
+  //       newLoading.enter = false;
+  //       return newLoading;
+  //     });
+  //   }
+  // };
+
+  // const handlePickWinner = async () => {
+  //   try {
+  //     setIsLoading((loading) => {
+  //       const newLoading = Object.assign({}, loading);
+  //       newLoading.pickWinner = true;
+  //       return newLoading;
+  //     });
+  //     const accounts = await web3.eth.getAccounts();
+  //     await lottery.methods.pickWinner().send({ from: accounts[0] });
+  //     toast.success("Winner has been selected");
+  //     setTimeout(function () {
+  //       window.location.reload();
+  //     }, 1000);
+  //   } catch (err) {
+  //     if (err instanceof Error) {
+  //       toast.error(err.message.split(": ")[2]);
+  //     } else {
+  //       toast.error("Something bad happen");
+  //     }
+  //   } finally {
+  //     setIsLoading((loading) => {
+  //       const newLoading = Object.assign({}, loading);
+  //       newLoading.pickWinner = false;
+  //       return newLoading;
+  //     });
+  //   }
+  // };
+
+  // let content;
+  // if (isManager) {
+  //   content = (
+  //     <div className="flex flex-col xs:items-center items-start gap-3">
+  //       <span>Pick a winner!</span>
+  //       <Button onClick={handlePickWinner} variant="outline" className="rounded-full" size="lg" disabled={players.length === 0}>
+  //         {isLoading.pickWinner ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+  //         Pick now
+  //       </Button>
+  //     </div>
+  //   );
+  // } else {
+  //   content = (
+  //     <div className="flex flex-col xs:items-center items-start gap-3">
+  //       <span>Learn more about Us!</span>
+  //       <Button variant="outline" className="rounded-full" size="lg">
+  //         View docs
+  //       </Button>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
-      {isIn ? <aside className="border-b pt-2 pb-3 font-semibold border-gray-700 px-8 text-center text-sm">Congratulations! 🎉 You're now in the running for our Crypto Raffle.</aside> : null}
+      {/* {isIn ? <aside className="border-b pt-2 pb-3 font-semibold border-gray-700 px-8 text-center text-sm">Congratulations! 🎉 You're now in the running for our Crypto Raffle.</aside> : null} */}
       <main className="flex mt-12 md:mt-20 flex-col gap-12 md:gap-24">
         <section className="px-8">
           <div className="max-w-xl lg:max-w-6xl mx-auto flex flex-col gap-16 lg:gap-12">
@@ -155,17 +138,10 @@ export default function Home() {
                   entertainment with us.
                 </p>
                 <div className="grid xs:grid-cols-[auto_1fr] items-center gap-4">
-                  <span className="font-bold uppercase">Ether in pools:</span>
+                  <span className="font-bold uppercase">Active raffle:</span>
                   <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
-                    <CustomProgress value={Number(balance)} total={1000} />
-                    <span>{balance === "0." ? "0" : balance} ether</span>
-                  </div>
-                </div>
-                <div className="grid xs:grid-cols-[auto_1fr] items-center gap-4">
-                  <span className="font-bold uppercase">Total players:</span>
-                  <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
-                    <CustomProgress value={numPlayers} total={1000} />
-                    <span>{numPlayers} players</span>
+                    <CustomProgress value={Number(deployedLottery.length)} total={100} />
+                    <span>{deployedLottery.length} raffle</span>
                   </div>
                 </div>
               </div>
@@ -173,7 +149,7 @@ export default function Home() {
                 <img src="/cube.png" alt="Cube technology" />
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-20">
+            {/* <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-20">
               {!isIn ? (
                 <div className="flex flex-col xs:items-center gap-3">
                   <span>Join the Crypto Raffle Now!</span>
@@ -193,7 +169,7 @@ export default function Home() {
                 </div>
               )}
               {content}
-            </div>
+            </div> */}
           </div>
         </section>
         <div className="h-52 xs:h-64 md:h-72 lg:h-80">
@@ -260,7 +236,7 @@ export default function Home() {
             ></path>
           </svg>
         </div>
-        <section className="px-8">
+        {/* <section className="px-8">
           <div className="max-w-6xl mx-auto flex flex-col gap-8">
             <h2 className="font-bold text-2xl text-center">Time left to join</h2>
             <div className="flex justify-center text-2xl gap-2 font-bold items-center">
@@ -271,7 +247,7 @@ export default function Home() {
               <span className="bg-white flex text-slate-950 w-14 h-14 items-center justify-center rounded-sm">{minutes}m</span>
             </div>
           </div>
-        </section>
+        </section> */}
         <section className="px-8">
           <div className="max-w-6xl mx-auto flex flex-col gap-12">
             <h2 className="font-bold text-2xl text-center">Embracing the power of cryptocurrency</h2>

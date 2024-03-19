@@ -8,7 +8,7 @@ export default function Navbar() {
   const [state, setState] = useState(false);
 
   const menus = [
-    { title: "Nodes", path: "/your-path" },
+    { title: "Raffles", path: "/raffles" },
     { title: "Docs", path: "/your-path" },
     { title: "Grants", path: "/your-path" },
   ];
