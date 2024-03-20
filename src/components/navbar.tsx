@@ -3,12 +3,13 @@ import Logo from "./logo";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { paths } from "@/paths";
 
 export default function Navbar() {
   const [state, setState] = useState(false);
 
   const menus = [
-    { title: "Raffles", path: "/raffles" },
+    { title: "Raffles", path: paths.raffles() },
     { title: "Docs", path: "/your-path" },
     { title: "Grants", path: "/your-path" },
   ];

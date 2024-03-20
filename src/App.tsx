@@ -5,6 +5,7 @@ import Home from "./pages/home";
 import { Toaster } from "react-hot-toast";
 import { DateProvider } from "./contexts/date-context";
 import Raffles from "./pages/raffles";
+import RafflesDetails from "./pages/raffles-details";
 
 function App() {
   return (
@@ -14,7 +15,10 @@ function App() {
           <Routes>
             <Route element={<AppLayout />}>
               <Route index element={<Home />} />
-              <Route path="raffles" element={<Raffles />} />
+              <Route path="raffles">
+                <Route index element={<Raffles />} />
+                <Route path=":address" element={<RafflesDetails />} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
