@@ -16,9 +16,11 @@ export type HomeLoading = { pickWinner: boolean; enter: boolean };
 export default function Home() {
   const [deployedLottery, setDeployedLottery] = useState<string[]>([]);
   const [totalBalance, setTotalBalance] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(function () {
     async function fetchData() {
+      setIsLoading(true);
       const deployedLottery = (await lotteryFactory.methods.getDeployedLottery().call()) as string[];
       let totalBalance = 0;
       const el = deployedLottery.map(async (address) => {
@@ -31,6 +33,7 @@ export default function Home() {
       });
       setDeployedLottery(deployedLottery);
       setTotalBalance(String(totalBalance));
+      setIsLoading(false);
     }
     fetchData();
   }, []);
@@ -53,14 +56,14 @@ export default function Home() {
                   <span className="font-bold uppercase">Active raffle:</span>
                   <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
                     <CustomProgress value={Number(deployedLottery.length)} total={100} />
-                    <span>{deployedLottery.length} raffle</span>
+                    <span>{!isLoading ? `${deployedLottery.length} raffle` : "Loading..."}</span>
                   </div>
                 </div>
                 <div className="grid xs:grid-cols-[auto_1fr] items-center gap-4">
                   <span className="font-bold uppercase">Total ethers:</span>
                   <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
                     <CustomProgress value={Number(totalBalance)} total={10} />
-                    <span>{totalBalance} ethers</span>
+                    <span>{!isLoading ? `${totalBalance} ethers` : "Loading..."}</span>
                   </div>
                 </div>
               </div>

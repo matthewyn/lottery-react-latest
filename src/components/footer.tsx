@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <footer className="py-10 pl-4 pr-8 mt-8">
-      <div className="max-w-6xl mx-auto grid gap-y-6 md:grid-cols-[auto_1fr_auto] items-center justify-items-center">
-        <div>
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center gap-6 sm:gap-0 justify-items-center">
+        <div className="flex-1">
           <Logo />
         </div>
         <div className="flex gap-3">
@@ -22,7 +22,7 @@ export default function Footer() {
             <BsTwitter size={20} />
           </Link>
         </div>
-        <p className="text-center">&copy; Crypto Raffle Inc. {new Date().getFullYear()}</p>
+        <p className="text-end flex-1">&copy; Crypto Raffle Inc. {new Date().getFullYear()}</p>
       </div>
     </footer>
   );

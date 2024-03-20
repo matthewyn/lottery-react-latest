@@ -24,6 +24,7 @@ export default function RafflesDetails() {
 
   useEffect(function () {
     async function fetchData() {
+      setIsLoading(true);
       const el = await lottery(address as string);
       const details = (await el.methods.details().call()) as LotteryDetails;
       const balance = await web3.eth.getBalance(address as string);
@@ -35,6 +36,7 @@ export default function RafflesDetails() {
       setBalance(web3.utils.fromWei(balance, "ether"));
       setMinimumContribution(Number(minimumContribution));
       setPlayers(players);
+      setIsLoading(false);
     }
     fetchData();
   }, []);
@@ -87,7 +89,7 @@ export default function RafflesDetails() {
           <div className="max-w-6xl mx-auto grid md:grid-cols-[3fr_1fr] items-start gap-8">
             <div className="flex flex-col gap-4">
               <h2 className="font-semibold text-white/70">Raffles Details</h2>
-              <h1 className="font-bold text-3xl mb-4">{details.title}</h1>
+              <h1 className="font-bold text-3xl mb-4">{!isLoading ? details.title : "Loading..."}</h1>
               <div className="flex gap-4 mb-4">
                 <FacebookShareButton url={`${window.location.href}`}>
                   <FacebookIcon size={32} round />
@@ -103,25 +105,25 @@ export default function RafflesDetails() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Total ether</CardTitle>
-                    <p className="text-white/70">{balance === "0." ? "0" : balance} ether</p>
+                    <p className="text-white/70">{!isLoading ? `${balance} ether` : "Loading..."}</p>
                   </CardHeader>
                 </Card>
                 <Card>
                   <CardHeader>
                     <CardTitle>Minimum wei to enter</CardTitle>
-                    <p className="text-white/70">{minimumContribution} wei</p>
+                    <p className="text-white/70">{!isLoading ? `${minimumContribution} wei` : "Loading..."}</p>
                   </CardHeader>
                 </Card>
                 <Card>
                   <CardHeader>
                     <CardTitle>Open until</CardTitle>
-                    <p className="text-white/70">{formatDate(details.deadline)}</p>
+                    <p className="text-white/70">{!isLoading ? formatDate(details.deadline) : "Loading..."}</p>
                   </CardHeader>
                 </Card>
                 <Card>
                   <CardHeader>
                     <CardTitle>Number of players</CardTitle>
-                    <p className="text-white/70">{players.length} players</p>
+                    <p className="text-white/70">{!isLoading ? `${players.length} players` : "Loading..."}</p>
                   </CardHeader>
                 </Card>
               </div>
