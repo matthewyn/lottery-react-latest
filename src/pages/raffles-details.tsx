@@ -7,10 +7,11 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import web3 from "@/web3";
 import { formatDate } from "@/utils";
 import CustomDialog from "@/components/custom-dialog";
-import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import { HiMiniCheck } from "react-icons/hi2";
+import { Label } from "@/components/ui/label";
 
 export default function RafflesDetails() {
   const [details, setDetails] = useState<LotteryDetails>({ title: "", deadline: 0 });
@@ -74,64 +75,60 @@ export default function RafflesDetails() {
     </CustomDialog>
   ) : (
     <div className="text-center flex flex-col gap-4">
-      <p>What's next?</p>
-      <Button variant="secondary" className="rounded-full w-full">
-        Explore our site
+      <Button variant="secondary" className="rounded-full w-full" disabled>
+        <HiMiniCheck className="mr-2 h-4 w-4" /> Already entered
       </Button>
     </div>
   );
 
   return (
-    <>
-      {isIn ? <aside className="border-b pt-2 pb-3 font-semibold border-gray-700 px-8 text-center text-sm">Congratulations! 🎉 You're now in the running for our Crypto Raffle.</aside> : null}
-      <main className="flex flex-col mt-12 md:mt-20 gap-12 md:gap-24">
-        <section className="px-8">
-          <div className="max-w-6xl mx-auto grid md:grid-cols-[3fr_1fr] items-start gap-8">
-            <div className="flex flex-col gap-4">
-              <h2 className="font-semibold text-white/70">Raffles Details</h2>
-              <h1 className="font-bold text-3xl mb-4">{!isLoading ? details.title : "Loading..."}</h1>
-              <div className="flex gap-4 mb-4">
-                <FacebookShareButton url={`${window.location.href}`}>
-                  <FacebookIcon size={32} round />
-                </FacebookShareButton>
-                <TwitterShareButton url={`${window.location.href}`}>
-                  <TwitterIcon size={32} round />
-                </TwitterShareButton>
-                <WhatsappShareButton url={`${window.location.href}`}>
-                  <WhatsappIcon size={32} round />
-                </WhatsappShareButton>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Total ether</CardTitle>
-                    <p className="text-white/70">{!isLoading ? `${balance} ether` : "Loading..."}</p>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Minimum wei to enter</CardTitle>
-                    <p className="text-white/70">{!isLoading ? `${minimumContribution} wei` : "Loading..."}</p>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Open until</CardTitle>
-                    <p className="text-white/70">{!isLoading ? formatDate(details.deadline) : "Loading..."}</p>
-                  </CardHeader>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Number of players</CardTitle>
-                    <p className="text-white/70">{!isLoading ? `${players.length} players` : "Loading..."}</p>
-                  </CardHeader>
-                </Card>
-              </div>
+    <main className="flex flex-col mt-12 md:mt-20 gap-12 md:gap-24">
+      <section className="px-8">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-[3fr_1fr] items-start gap-8">
+          <div className="flex flex-col gap-4">
+            <h2 className="font-semibold text-white/70">Raffles Details</h2>
+            <h1 className="font-bold text-3xl mb-2">{!isLoading ? details.title : "Loading..."}</h1>
+            <div className="flex gap-4 mb-4">
+              <FacebookShareButton url={`${window.location.href}`}>
+                <FacebookIcon size={32} round />
+              </FacebookShareButton>
+              <TwitterShareButton url={`${window.location.href}`}>
+                <TwitterIcon size={32} round />
+              </TwitterShareButton>
+              <WhatsappShareButton url={`${window.location.href}`}>
+                <WhatsappIcon size={32} round />
+              </WhatsappShareButton>
             </div>
-            <div className="border rounded-md p-8">{content}</div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Total ether</CardTitle>
+                  <p className="text-white/70">{!isLoading ? `${balance} ether` : "Loading..."}</p>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Minimum wei to enter</CardTitle>
+                  <p className="text-white/70">{!isLoading ? `${minimumContribution} wei` : "Loading..."}</p>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Open until</CardTitle>
+                  <p className="text-white/70">{!isLoading ? formatDate(details.deadline) : "Loading..."}</p>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Number of players</CardTitle>
+                  <p className="text-white/70">{!isLoading ? `${players.length} players` : "Loading..."}</p>
+                </CardHeader>
+              </Card>
+            </div>
           </div>
-        </section>
-      </main>
-    </>
+          <div className="border rounded-md p-8">{content}</div>
+        </div>
+      </section>
+    </main>
   );
 }

@@ -80,8 +80,8 @@ export default function Home() {
                 </Button>
               </div>
               <div>
-                <Button variant="outline" className="rounded-full" size="lg">
-                  View docs
+                <Button variant="outline" className="rounded-full" size="lg" asChild>
+                  <Link to={paths.docs()}>View docs</Link>
                 </Button>
               </div>
             </div>

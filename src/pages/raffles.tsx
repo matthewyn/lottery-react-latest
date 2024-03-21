@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { lottery, lotteryFactory } from "@/lottery";
 import web3 from "@/web3";
-import { Label } from "@radix-ui/react-label";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { HiMiniPlus } from "react-icons/hi2";
@@ -13,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { formatDate } from "@/utils";
 import { paths } from "@/paths";
+import { Label } from "@/components/ui/label";
 
 export interface LotteryDetails {
   title: string;

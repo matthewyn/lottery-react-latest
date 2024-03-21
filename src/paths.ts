@@ -8,4 +8,7 @@ export const paths = {
   raffleDetails(address: string) {
     return `/raffles/${address}`;
   },
+  docs() {
+    return "/docs";
+  },
 };

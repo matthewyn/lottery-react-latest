@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="flex-1">
           <Logo />
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           <Link to="#">
             <BsInstagram size={20} />
           </Link>

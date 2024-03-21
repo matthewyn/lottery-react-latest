@@ -10,12 +10,12 @@ export default function Navbar() {
 
   const menus = [
     { title: "Raffles", path: paths.raffles() },
-    { title: "Docs", path: "/your-path" },
+    { title: "Docs", path: paths.docs() },
     { title: "Grants", path: "/your-path" },
   ];
 
   return (
-    <nav className="px-8 border-b border-gray-700">
+    <nav className="px-8 border-b border-gray-700 sticky bg-[#121011] z-50 top-0 inset-x-0">
       <div className="max-w-7xl mx-auto py-3 md:pb-3 flex flex-col md:flex-row gap-4 md:items-center justify-between">
         <div className="flex flex-1 items-center gap-4">
           <div className="md:hidden">
