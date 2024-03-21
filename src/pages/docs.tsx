@@ -1,9 +1,29 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { paths } from "@/paths";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { HiMiniCheck } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 
 export default function Docs() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!firstName || !lastName || !email || !country) return toast.error("Please fill required field");
+    toast.success("Form has been submitted");
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setCountry("");
+  };
+
   return (
     <main className="flex flex-col mt-12 md:mt-20 gap-12 md:gap-24">
       <section className="px-8">
@@ -47,6 +67,39 @@ export default function Docs() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+        </div>
+      </section>
+      <section className="px-8">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+          <div className="flex flex-col gap-4">
+            <h2 className="text-2xl font-semibold mt-6 md:mt-0">Need more info?</h2>
+            <p>Get in touch and we'll send you over all the information you need, no obligations whatsoever. </p>
+            <p className="flex items-center gap-2">
+              <HiMiniCheck color="#6ee7b7" />
+              Quick response with great feedback
+            </p>
+            <p className="flex items-center gap-2">
+              <HiMiniCheck color="#6ee7b7" />
+              Your questions answered, by phone or email
+            </p>
+            <p className="flex items-center gap-2">
+              <HiMiniCheck color="#6ee7b7" />
+              Helpful advice with no obligations
+            </p>
+          </div>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <Label htmlFor="first-name">First name</Label>
+            <Input id="first-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+            <Label htmlFor="last-name">Last name</Label>
+            <Input id="last-name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Label htmlFor="country">Country</Label>
+            <Input id="country" className="mb-4" value={country} onChange={(e) => setCountry(e.target.value)} />
+            <div>
+              <Button variant="secondary">Request more details</Button>
+            </div>
+          </form>
         </div>
       </section>
     </main>
