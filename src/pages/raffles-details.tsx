@@ -58,7 +58,7 @@ export default function RafflesDetails() {
       }, 1000);
     } catch (err) {
       if (err instanceof Error) {
-        toast.error(err.message.split(": ")[2]);
+        toast.error(err.message);
       } else {
         toast.error("Something bad happen");
       }

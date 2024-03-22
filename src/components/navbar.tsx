@@ -26,8 +26,10 @@ export default function Navbar() {
           <div className="hidden sm:block">
             <Logo />
           </div>
-          <Button variant="secondary" className="md:hidden rounded-full ml-auto">
-            Join the network
+          <Button variant="secondary" className="md:hidden rounded-full ml-auto" asChild>
+            <Link to="https://github.com/matthewyn/lottery-react-latest" target="_blank">
+              See the code
+            </Link>
           </Button>
         </div>
         <div className={`md:block mb-3 md:mb-0 ${state ? "block" : "hidden"}`}>
@@ -43,8 +45,10 @@ export default function Navbar() {
           </ul>
         </div>
         <div className="hidden md:flex flex-1 justify-end">
-          <Button variant="secondary" className="rounded-full">
-            Join the network
+          <Button variant="secondary" className="rounded-full" asChild>
+            <Link to="https://github.com/matthewyn/lottery-react-latest" target="_blank">
+              See the code
+            </Link>
           </Button>
         </div>
       </div>
