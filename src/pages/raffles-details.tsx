@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { HiMiniCheck } from "react-icons/hi2";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 export default function RafflesDetails() {
   const [details, setDetails] = useState<LotteryDetails>({ title: "", deadline: 0 });
@@ -88,7 +89,7 @@ export default function RafflesDetails() {
           <div className="flex flex-col gap-4">
             <h2 className="font-semibold text-white/70">Raffles Details</h2>
             <h1 className="font-bold text-3xl mb-2">{!isLoading ? details.title : "Loading..."}</h1>
-            <div className="flex gap-4 mb-4">
+            <div className="flex gap-4 mb-8">
               <FacebookShareButton url={`${window.location.href}`}>
                 <FacebookIcon size={32} round />
               </FacebookShareButton>
@@ -99,6 +100,13 @@ export default function RafflesDetails() {
                 <WhatsappIcon size={32} round />
               </WhatsappShareButton>
             </div>
+            <h2 className="font-bold text-xl">Important notes</h2>
+            <ul className="list-disc list-inside mb-4 flex flex-col gap-2">
+              <li>Only Ethereum (ETH) is accepted for participation in the crypto raffle.</li>
+              <li>Make sure to send your Ethereum from a wallet that you control. Do not send funds directly from an exchange.</li>
+              <li>The smart contract address provided is where you'll send your Ethereum to purchase raffle tickets. Please verify the address before sending any funds.</li>
+              <li>Participation in the crypto raffle is open to eligible individuals aged 18 and above. By participating, you agree to abide by the raffle's terms and conditions.</li>
+            </ul>
             <div className="grid sm:grid-cols-2 gap-4">
               <Card>
                 <CardHeader>
@@ -126,7 +134,12 @@ export default function RafflesDetails() {
               </Card>
             </div>
           </div>
-          <div className="border rounded-md p-8">{content}</div>
+          <div className="border rounded-md p-8">
+            {content}
+            <Separator className="my-6" />
+            <h3 className="text-white/70">Winner</h3>
+            <p>Not yet selected</p>
+          </div>
         </div>
       </section>
     </main>

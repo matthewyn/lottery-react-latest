@@ -11,7 +11,7 @@ export default function Navbar() {
   const menus = [
     { title: "Raffles", path: paths.raffles() },
     { title: "Docs", path: paths.docs() },
-    { title: "Grants", path: "/your-path" },
+    { title: "About", path: paths.about() },
   ];
 
   return (

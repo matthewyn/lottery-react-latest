@@ -11,4 +11,7 @@ export const paths = {
   docs() {
     return "/docs";
   },
+  about() {
+    return "/about";
+  },
 };

@@ -193,6 +193,19 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <section className="bg-emerald-300 py-12 px-8 text-black">
+          <div className="max-w-6xl mx-auto text-center flex flex-col gap-4">
+            <h2 className="text-3xl font-bold">Get Our App</h2>
+            <p className="max-w-lg mx-auto">
+              Don't miss out on your chance to win big with Crypto Raffle! Head over to our Raffles Page to purchase your tickets and join the next draw. Follow us on social media for updates and announcements.
+            </p>
+            <div className="flex gap-3 flex-col xs:flex-row justify-center">
+              <Button size="lg" className="rounded-full" asChild>
+                <Link to={paths.raffles()}>Get started</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
       </main>
     </>
   );

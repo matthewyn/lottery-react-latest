@@ -7,6 +7,7 @@ import { DateProvider } from "./contexts/date-context";
 import Raffles from "./pages/raffles";
 import RafflesDetails from "./pages/raffles-details";
 import Docs from "./pages/docs";
+import About from "./pages/about";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path=":address" element={<RafflesDetails />} />
               </Route>
               <Route path="docs" element={<Docs />} />
+              <Route path="about" element={<About />} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "@/utils";
 import { paths } from "@/paths";
 import { Label } from "@/components/ui/label";
+import { HashLink } from "react-router-hash-link";
 
 export interface LotteryDetails {
   title: string;
@@ -102,15 +103,17 @@ export default function Raffles() {
           <h1 className="font-bold text-3xl">Explore and Enter Our Latest Raffles</h1>
           <p className="mb-3">Don&apos;t miss out &mdash; explore our lineup now and secure your chance to claim fantastic prizes</p>
           <div>
-            <Button variant="secondary" className="rounded-full">
-              Explore now
+            <Button variant="secondary" className="rounded-full" asChild>
+              <HashLink smooth to="#raffles">
+                Explore now
+              </HashLink>
             </Button>
           </div>
         </div>
       </section>
       <section className="px-8">
         <div className="max-w-6xl mx-auto grid md:grid-cols-[3fr_1fr] items-start gap-8">
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8" id="raffles">
             <h2 className="text-2xl font-bold mt-8 md:mt-0">Recent raffles</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">{items}</div>
           </div>
